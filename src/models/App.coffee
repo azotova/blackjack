@@ -18,8 +18,10 @@ class window.App extends Backbone.Model
       console.log('dealer turn called')
       dealerHand.dealerPlay();
     dealerHand.on 'dealerTurnEnd', ->
-      if (dealerHand.minScore() > 21) then that.playerWins()
-      else if (dealerHand.minScore() < playerHand.minScore()) then that.playerWins()
+      console.log("dealer", dealerHand.realScore(), "player", playerHand.realScore())
+      if (dealerHand.realScore() > 21) then that.playerWins()
+      else if (dealerHand.realScore() < playerHand.realScore()) then that.playerWins()
+      else if (dealerHand.realScore() == playerHand.realScore()) then that.tie()
       else that.gameOver()
       console.log('in App, after dealer turn')
 
@@ -29,4 +31,9 @@ class window.App extends Backbone.Model
     console.log('called gO')
 
   playerWins: ->
+    @trigger 'playerWon', @
     console.log('player wins')
+
+  tie: ->
+    @trigger 'tie', @
+    console.log('tie')

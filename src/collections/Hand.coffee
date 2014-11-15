@@ -25,12 +25,19 @@ class window.Hand extends Backbone.Collection
     # when there is an ace, it offers you two scores - the original score, and score + 10.
     [@minScore(), @minScore() + 10 * @hasAce()]
 
+  realScore: ->
+    realScore = @scores()[1]
+    if @scores()[1] > 21 then realScore = @scores()[0]
+    realScore
+
   dealerPlay: ->
     console.log("Dealer plays now")
     @at(0).flip()
     console.log(@scores()[0])
-    while @scores()[0] < 17
+    # scores = @realScore()[1]
+    while @realScore() < 17
       @hit()
+      # if @scores()[1] > 21 then scores = @scores()[0]
     @trigger 'dealerTurnEnd', @
 
 
