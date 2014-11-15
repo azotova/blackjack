@@ -35,8 +35,9 @@ class window.AppView extends Backbone.View
     'click .hit-button': -> @model.get('playerHand').hit()
     'click .stand-button': -> @model.get('playerHand').stand()
     'click .reset-button': ->
-      @model.initialize()
-      @initialize()
+      # @model.initialize()
+      # @initialize()
+      @renderReset()
     # 'afterRender': ->@model.blackjack()
 
   initialize: ->
@@ -61,6 +62,14 @@ class window.AppView extends Backbone.View
     @$el.html @template()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+
+  renderReset: ->
+    @$el.children().detach()
+    @$el.html @template()
+    player = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, false, 10, 0
+    dealer = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, true
+    @$('.player-hand-container').html new HandView(collection: player).el
+    @$('.dealer-hand-container').html new HandView(collection: dealer).el
 
   renderLose: ->
     console.log('loss?')
