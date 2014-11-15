@@ -1,7 +1,7 @@
 class window.Hand extends Backbone.Collection
   model: Card
 
-  initialize: (array, @deck, @isDealer) ->
+  initialize: (array, @deck, @isDealer, @money, @betAmount) ->
 
 
     # @checkBlackjack()
@@ -48,4 +48,12 @@ class window.Hand extends Backbone.Collection
       # if @scores()[1] > 21 then scores = @scores()[0]
     @trigger 'dealerTurnEnd', @
 
+  bet: (betAmount)->
+    console.log(betAmount)
+    @money = @money - betAmount;
+    @betAmount = betAmount
+    @at(0).flip()
+    @at(1).flip()
+    @trigger 'betMade', @
+    return
 

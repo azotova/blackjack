@@ -35,16 +35,13 @@ class window.AppView extends Backbone.View
     'click .hit-button': -> @model.get('playerHand').hit()
     'click .stand-button': -> @model.get('playerHand').stand()
     'click .reset-button': ->
-      @initialize()
-      @model.initialize()
+      # @model.initialize()
+      # @initialize()
+      @renderReset()
 
-      
-
-    # 'afterRender': ->@model.blackjack()
 
   initialize: ->
     @render()
-    jackState = true;
     that = @
     @model.on 'gameOver', ->
       that.renderLose()
@@ -52,12 +49,10 @@ class window.AppView extends Backbone.View
       that.renderWin()
     @model.on 'tie', ->
       that.renderTie()
-    @model.on 'blackjack', ->
-      if (jackState == true)
-        that.renderBlackjack()
-        jackState = false;
-        return
-    @afterRender()
+    playerH = @model.get 'playerHand'
+    if (playerH.realScore() == 21)
+      @renderBlackjack()
+      console.log("triggered")
     return
 
 
@@ -68,12 +63,13 @@ class window.AppView extends Backbone.View
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
 
-  afterRender: ->
-    playerH = @model.get 'playerHand'
-    if (playerH.realScore() == 21)
-      @model.blackjack()
-      console.log("triggered")
-    return
+  renderReset: ->
+    @$el.children().detach()
+    @$el.html @template()
+    player = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, false, 10, 0
+    dealer = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, true
+    @$('.player-hand-container').html new HandView(collection: player).el
+    @$('.dealer-hand-container').html new HandView(collection: dealer).el
 
   renderLose: ->
     console.log('loss?')
