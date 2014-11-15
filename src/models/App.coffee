@@ -4,16 +4,22 @@ class window.App extends Backbone.Model
 
   initialize: ->
     # debugger
+    that = @
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
-    @set 'dealerHand', deck.dealDealer()
-    console.log('start')
-    that = @
     playerHand = @get 'playerHand'
+    console.log(playerHand.realScore())
+    #else
+    @set 'dealerHand', deck.dealDealer()
     dealerHand = @get 'dealerHand'
+    console.log('start')
+    if playerHand.realScore() == 21 then that.blackjack()
     playerHand.on 'gameOver', ->
       console.log 'you lose'
       that.gameOver()
+    # playerHand.on 'blackjack', ->
+    #   console.log('bl jack heard')
+    #   that.blackjack()
     playerHand.on 'dealersTurn', ->
       console.log('dealer turn called')
       dealerHand.dealerPlay();
@@ -37,3 +43,10 @@ class window.App extends Backbone.Model
   tie: ->
     @trigger 'tie', @
     console.log('tie')
+
+  blackjack: ->
+    console.log('blackjack')
+    @trigger 'blackjack', @
+
+
+

@@ -3,13 +3,21 @@ class window.Hand extends Backbone.Collection
 
   initialize: (array, @deck, @isDealer) ->
 
+
+    # @checkBlackjack()
+
+  # checkBlackjack: ->
+  #   if @realScore() == 21 then @trigger 'blackjack', @
+
   stand: ->
     @trigger 'dealersTurn', @
 
   hit: ->
-    @add(@deck.pop())
+    lastCard = @deck.pop()
+    @add(lastCard)
     console.log(@minScore())
     if @minScore() > 21 then @trigger 'gameOver', @
+    lastCard
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1
