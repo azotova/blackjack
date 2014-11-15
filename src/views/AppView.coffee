@@ -37,6 +37,9 @@ class window.AppView extends Backbone.View
     'click .reset-button': ->
       @initialize()
       @model.initialize()
+
+      
+
     # 'afterRender': ->@model.blackjack()
 
   initialize: ->
