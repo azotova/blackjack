@@ -1,9 +1,6 @@
 class window.Hand extends Backbone.Collection
   model: Card
 
-  # gameOver : ->
-  #   @trigger 'gameOver', this
-
   initialize: (array, @deck, @isDealer) ->
 
   stand: ->
@@ -30,5 +27,10 @@ class window.Hand extends Backbone.Collection
 
   dealerPlay: ->
     console.log("Dealer plays now")
+    @at(0).flip()
+    console.log(@scores()[0])
+    while @scores()[0] < 17
+      @hit()
+    @trigger 'dealerTurnEnd', @
 
 
