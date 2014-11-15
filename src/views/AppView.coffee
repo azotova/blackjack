@@ -35,13 +35,13 @@ class window.AppView extends Backbone.View
     'click .hit-button': -> @model.get('playerHand').hit()
     'click .stand-button': -> @model.get('playerHand').stand()
     'click .reset-button': ->
-      @initialize()
       @model.initialize()
+      @initialize()
     # 'afterRender': ->@model.blackjack()
 
   initialize: ->
     @render()
-    jackState = true;
+    # jackState = true;
     that = @
     @model.on 'gameOver', ->
       that.renderLose()
@@ -49,11 +49,11 @@ class window.AppView extends Backbone.View
       that.renderWin()
     @model.on 'tie', ->
       that.renderTie()
-    @model.on 'blackjack', ->
-      if (jackState == true)
-        that.renderBlackjack()
-        jackState = false;
-        return
+    # @model.on 'blackjack', ->
+    #   if (!jackState)
+    #     that.renderBlackjack()
+    #     jackState = true;
+    #     return
     @afterRender()
     return
 
@@ -68,7 +68,7 @@ class window.AppView extends Backbone.View
   afterRender: ->
     playerH = @model.get 'playerHand'
     if (playerH.realScore() == 21)
-      @model.blackjack()
+      @renderBlackjack()
       console.log("triggered")
     return
 
