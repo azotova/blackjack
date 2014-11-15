@@ -41,7 +41,6 @@ class window.AppView extends Backbone.View
 
   initialize: ->
     @render()
-    # jackState = true;
     that = @
     @model.on 'gameOver', ->
       that.renderLose()
@@ -49,12 +48,10 @@ class window.AppView extends Backbone.View
       that.renderWin()
     @model.on 'tie', ->
       that.renderTie()
-    # @model.on 'blackjack', ->
-    #   if (!jackState)
-    #     that.renderBlackjack()
-    #     jackState = true;
-    #     return
-    @afterRender()
+    playerH = @model.get 'playerHand'
+    if (playerH.realScore() == 21)
+      @renderBlackjack()
+      console.log("triggered")
     return
 
 
@@ -64,13 +61,6 @@ class window.AppView extends Backbone.View
     @$el.html @template()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
-
-  afterRender: ->
-    playerH = @model.get 'playerHand'
-    if (playerH.realScore() == 21)
-      @renderBlackjack()
-      console.log("triggered")
-    return
 
   renderLose: ->
     console.log('loss?')
