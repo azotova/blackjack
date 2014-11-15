@@ -1,6 +1,8 @@
 class window.AppView extends Backbone.View
   template: _.template '
-    <button class="hit-button">Hit</button> <button class="stand-button">Stand</button><button class="reset-button">Reset</button>
+    <button class="hit-button">Hit</button> <button class="stand-button">Stand</button>
+    <button class="reset-button">Reset</button>
+    <span class = "message"></span>
     <div class="player-hand-container"></div>
     <div class="dealer-hand-container"></div>
   '
@@ -39,6 +41,7 @@ class window.AppView extends Backbone.View
 
   initialize: ->
     @render()
+    jackState = true;
     that = @
     @model.on 'gameOver', ->
       that.renderLose()
@@ -47,7 +50,11 @@ class window.AppView extends Backbone.View
     @model.on 'tie', ->
       that.renderTie()
     @model.on 'blackjack', ->
-      that.renderBlackjack()
+      if (jackState == true)
+        that.renderBlackjack()
+        jackState = false;
+        return
+    @afterRender()
     return
 
 
@@ -57,6 +64,13 @@ class window.AppView extends Backbone.View
     @$el.html @template()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+
+  afterRender: ->
+    playerH = @model.get 'playerHand'
+    if (playerH.realScore() == 21)
+      @model.blackjack()
+      console.log("triggered")
+    return
 
   renderLose: ->
     console.log('loss?')
@@ -81,8 +95,11 @@ class window.AppView extends Backbone.View
 
   renderBlackjack: ->
       console.log('blackjack!')
-      # debugger;
-      @$el.children().detach()
-      @$el.html @templateBlackjack()
-      @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
-      @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+      this.$el.find('span.message').html("You got a blackjack!")
+      this.$el.find('button.hit-button').hide()
+      this.$el.find('button.stand-button').hide()
+      #debugger;
+      #@$el.children().detach()
+      #@$el.html @templateBlackjack()
+      #@$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
+      #@$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el

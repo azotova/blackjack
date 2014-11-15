@@ -13,7 +13,7 @@ class window.App extends Backbone.Model
     @set 'dealerHand', deck.dealDealer()
     dealerHand = @get 'dealerHand'
     console.log('start')
-    if playerHand.realScore() == 21 then that.blackjack()
+    #if playerHand.realScore() == 21 then that.blackjack()
     playerHand.on 'gameOver', ->
       console.log 'you lose'
       that.gameOver()
