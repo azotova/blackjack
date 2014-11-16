@@ -66,8 +66,14 @@ class window.AppView extends Backbone.View
   renderReset: ->
     @$el.children().detach()
     @$el.html @template()
-    player = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, false, 10, 0
-    dealer = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, true
+    money = @model.get('playerHand').money
+    console.log('money')
+    console.log(money)
+    player = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @model.get('deck'), false, money, 0
+    dealer = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @model.get('deck'), true
+    #@model.set('playerHand', player)
+    #@model.set('dealerHand', dealer)
+    @model.reset(player, dealer)
     @$('.player-hand-container').html new HandView(collection: player).el
     @$('.dealer-hand-container').html new HandView(collection: dealer).el
 

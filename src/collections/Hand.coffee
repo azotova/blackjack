@@ -10,6 +10,8 @@ class window.Hand extends Backbone.Collection
   #   if @realScore() == 21 then @trigger 'blackjack', @
 
   stand: ->
+    console.log('did we stand>')
+    #debugger;
     @trigger 'dealersTurn', @
 
   hit: ->
@@ -49,7 +51,7 @@ class window.Hand extends Backbone.Collection
     @trigger 'dealerTurnEnd', @
 
   bet: (betAmount)->
-    console.log(betAmount)
+    #console.log(betAmount)
     @money = @money - betAmount;
     @betAmount = betAmount
     @at(0).flip()

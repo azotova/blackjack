@@ -7,10 +7,18 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     playerHand = @get 'playerHand'
-    console.log(playerHand.realScore())
+    #console.log(playerHand.realScore())
     @set 'dealerHand', deck.dealDealer()
     dealerHand = @get 'dealerHand'
     console.log('start')
+    @listen(playerHand, dealerHand)
+
+  listen: (pl, dl) ->
+    that = @
+    #playerHand = @get 'playerHand'
+    #dealerHand = @get 'dealerHand'
+    playerHand = pl
+    dealerHand = dl
     playerHand.on 'gameOver', ->
       console.log 'you lose'
       that.gameOver()
@@ -28,6 +36,12 @@ class window.App extends Backbone.Model
       else that.gameOver()
       console.log('in App, after dealer turn')
 
+  reset: (player, dealer) ->
+    @set('playerHand', player)
+    @set('dealerHand', dealer)
+    playerHand = @get 'playerHand'
+    dealerHand = @get 'dealerHand'
+    @listen(playerHand, dealerHand)
 
   gameOver: ->
     @trigger 'gameOver', @
