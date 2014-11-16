@@ -51,7 +51,7 @@ class window.Hand extends Backbone.Collection
     @trigger 'dealerTurnEnd', @
 
   bet: (betAmount)->
-    #console.log(betAmount)
+    console.log('player hand betting')
     @money = @money - betAmount;
     @betAmount = betAmount
     @at(0).flip()

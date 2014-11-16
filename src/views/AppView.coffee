@@ -49,10 +49,13 @@ class window.AppView extends Backbone.View
       that.renderWin()
     @model.on 'tie', ->
       that.renderTie()
-    playerH = @model.get 'playerHand'
-    if (playerH.realScore() == 21)
-      @renderBlackjack()
+    @model.on 'blackjack', ->
+      that.renderBlackjack()
       console.log("triggered")
+    #playerH = @model.get 'playerHand'
+    #if (playerH.realScore() == 21)
+      #@renderBlackjack()
+      #console.log("triggered")
     return
 
 

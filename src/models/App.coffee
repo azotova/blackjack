@@ -28,6 +28,7 @@ class window.App extends Backbone.Model
     playerHand.on 'betMade', ->
       console.log('bet has been made')
       dealerHand.at(1).flip();
+      if (playerHand.realScore() == 21) then that.blackjack()
     dealerHand.on 'dealerTurnEnd', ->
       console.log("dealer", dealerHand.realScore(), "player", playerHand.realScore())
       if (dealerHand.realScore() > 21) then that.playerWins()
@@ -58,6 +59,8 @@ class window.App extends Backbone.Model
     console.log('tie')
 
   blackjack: ->
+    playerHand = @get 'playerHand'
+    playerHand.money += 2.5* playerHand.betAmount
     console.log('blackjack')
     @trigger 'blackjack', @
 

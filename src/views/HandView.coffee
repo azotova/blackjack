@@ -8,8 +8,11 @@ class window.HandView extends Backbone.View
 
   events:
     'click .submit': ->
-      @collection.bet($('input').val())
-      @render()
+      console.log('betting')
+      if ($('input').val()>@collection.money) then alert "You don't have enough money"
+      else
+        @collection.bet($('input').val())
+        @render()
 
 
   initialize: ->
