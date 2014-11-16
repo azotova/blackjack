@@ -32,17 +32,27 @@ class window.AppView extends Backbone.View
   '
 
   events:
-    'click .hit-button': -> @model.get('playerHand').hit()
-    'click .stand-button': -> @model.get('playerHand').stand()
+    'click .hit-button': ->
+      @model.get('playerHand').hit()
+      this.$el.find('.submit').hide()
+      this.$el.find('input').hide()
+    'click .stand-button': ->
+      @model.get('playerHand').stand()
+      this.$el.find('.submit').hide()
+      this.$el.find('input').hide()
     'click .reset-button': ->
       # @model.initialize()
       # @initialize()
       @renderReset()
+      this.$el.find('button.hit-button').hide()
+      this.$el.find('button.stand-button').hide()
     # 'afterRender': ->@model.blackjack()
 
   initialize: ->
     @render()
     that = @
+    that.$el.find('button.hit-button').hide()
+    that.$el.find('button.stand-button').hide()
     @model.on 'gameOver', ->
       that.renderLose()
     @model.on 'playerWon', ->
@@ -52,6 +62,10 @@ class window.AppView extends Backbone.View
     @model.on 'blackjack', ->
       that.renderBlackjack()
       console.log("triggered")
+    @model.on 'betMade', ->
+      that.$el.find('button.hit-button').show()
+      that.$el.find('button.stand-button').show()
+      console.log("hit and stand revealed")
     #playerH = @model.get 'playerHand'
     #if (playerH.realScore() == 21)
       #@renderBlackjack()

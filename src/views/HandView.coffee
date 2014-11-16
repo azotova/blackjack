@@ -13,6 +13,8 @@ class window.HandView extends Backbone.View
       else
         @collection.bet($('input').val())
         @render()
+        this.$el.find('.submit').hide()
+        this.$el.find('input').hide()
 
 
   initialize: ->
