@@ -32,27 +32,44 @@ class window.AppView extends Backbone.View
   '
 
   events:
-    'click .hit-button': -> @model.get('playerHand').hit()
-    'click .stand-button': -> @model.get('playerHand').stand()
+    'click .hit-button': ->
+      @model.get('playerHand').hit()
+      this.$el.find('.submit').hide()
+      this.$el.find('input').hide()
+    'click .stand-button': ->
+      @model.get('playerHand').stand()
+      this.$el.find('.submit').hide()
+      this.$el.find('input').hide()
     'click .reset-button': ->
       # @model.initialize()
       # @initialize()
       @renderReset()
-
+      this.$el.find('button.hit-button').hide()
+      this.$el.find('button.stand-button').hide()
+    # 'afterRender': ->@model.blackjack()
 
   initialize: ->
     @render()
     that = @
+    that.$el.find('button.hit-button').hide()
+    that.$el.find('button.stand-button').hide()
     @model.on 'gameOver', ->
       that.renderLose()
     @model.on 'playerWon', ->
       that.renderWin()
     @model.on 'tie', ->
       that.renderTie()
-    playerH = @model.get 'playerHand'
-    if (playerH.realScore() == 21)
-      @renderBlackjack()
+    @model.on 'blackjack', ->
+      that.renderBlackjack()
       console.log("triggered")
+    @model.on 'betMade', ->
+      that.$el.find('button.hit-button').show()
+      that.$el.find('button.stand-button').show()
+      console.log("hit and stand revealed")
+    #playerH = @model.get 'playerHand'
+    #if (playerH.realScore() == 21)
+      #@renderBlackjack()
+      #console.log("triggered")
     return
 
 
@@ -66,8 +83,14 @@ class window.AppView extends Backbone.View
   renderReset: ->
     @$el.children().detach()
     @$el.html @template()
-    player = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, false, 10, 0
-    dealer = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @, true
+    money = @model.get('playerHand').money
+    console.log('money')
+    console.log(money)
+    player = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @model.get('deck'), false, money, 0
+    dealer = new Hand [@model.get('deck').pop().flip(), @model.get('deck').pop().flip()], @model.get('deck'), true
+    #@model.set('playerHand', player)
+    #@model.set('dealerHand', dealer)
+    @model.reset(player, dealer)
     @$('.player-hand-container').html new HandView(collection: player).el
     @$('.dealer-hand-container').html new HandView(collection: dealer).el
 
